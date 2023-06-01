@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <title>Instellingen</title>
+    <link rel="stylesheet" type="text/css" href="Style/style.css">
+    <link rel="stylesheet" type="text/css" href="Style/style-animation.css">
+    <link rel="icon" type="image/x-icon" href="/images/Logo/logo-color.png">
+    <script type="module" src="/functies/navbar.js" defer></script>
+    <script type="text/javascript">
+      function changeBackground() {
+        var select = document.getElementById("background-select");
+        var value = select.options[select.selectedIndex].value;
+        var body = document.getElementsByTagName("body")[0];
+
+        switch(value) {
+          case "default":
+            body.style.backgroundImage = "url('/Images/Logo/logo-lichter.png')";
+            break;
+          case "background1":
+            body.style.backgroundImage = "url('/Images/Logo/logo-white.png')";
+            break;
+          case "background2":
+            body.style.backgroundImage = "url('/Images/Logo/logo-color.png')";
+            break;
+          case "background3":
+            body.style.backgroundImage = "url('/Images/Logo/logo-black.png')";
+            break;
+          default:
+            body.style.backgroundImage = "url('/Images/Logo/logo-lichter.png')";
+        }
+
+        localStorage.setItem('background', value);
+      }
+
+      window.onload = function() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var background = localStorage.getItem('background');
+
+        if (background) {
+          var select = document.getElementById("background-select");
+          select.value = background;
+          changeBackground();
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <div id="navbar-placeholder"></div>
+    <div>
+      <label for="background-select">Selecteer een achtergrond:</label>
+      <select id="background-select" onchange="changeBackground()">
+        <option value="default">Default</option>
+        <option value="background1">Zwart</option>
+        <option value="background2">Blauw</option>
+        <option value="background3">Wit</option>
+      </select>
+    </div>
+  </body>
+</html>

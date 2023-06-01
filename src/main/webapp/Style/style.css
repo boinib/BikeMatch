@@ -1,0 +1,402 @@
+body {
+  background-image: url('/Images/Logo/logo-lichter.png');
+  background-attachment: fixed;
+  background-size: 300px;
+  font-family: 'Advent Pro Medium', sans-serif;
+  font-weight: bold;
+  color: #374151;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: #374151;
+}
+
+.bike-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.bike {
+  background-color: #f4f9fe;
+  border-radius: 20px;
+  box-shadow: 2px 2px 6px rgb(141,189,255);
+  flex-basis: calc(50% - 20px);
+  margin-left: 10px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+.bike .image {
+  width: 100%;
+  height: 80%;
+  
+}
+.bike h2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.bike-details {
+  padding: 100px;
+}
+
+.bike-details p {
+  margin: 0;
+}
+
+.bike-details strong {
+  margin-right: 5px;
+}
+
+.bike:hover {
+  background-color: #cbe1ff;
+}
+
+a {
+  color: #374151;
+  text-decoration: none;
+}
+
+.bikes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.sidebar {
+  background-color: #374151;
+  font-family: 'Advent Pro Medium', sans-serif;
+  font-weight: bold;    
+  width: 120px;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px;
+  text-align: left;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px; 
+}
+
+.sidebar a {
+  color: #d3d7e1;
+  text-decoration: none;
+  font-size: 15px; 
+  line-height: 1.5; 
+}
+
+.sidebar img {
+  position: absolute;
+  bottom: 0px;
+  left: 5px;
+  width: 100px;
+}
+
+.sidebar img a {
+  position: absolute;
+  bottom: 0px;
+  left: 5px;
+  width: 100px;
+}
+
+.sidebar li:hover {
+  background-color: transparent;
+}
+.sidebar a {
+transition: background-color 0.2s ease-in-out;
+}  
+
+.sidebar ul.dropdown {
+  display: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  background-color: #ffffff;
+  text-align: center;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 20px;
+
+}
+
+.sidebar ul.dropdown li {
+  display: block;
+  margin: 10px;
+}
+.sidebar ul.dropdown a{
+  color: #44546d;
+}
+
+.sidebar li:hover .dropdown {
+  display: block;
+}
+
+.sidebar li:last-child img {
+  margin-top: 30px;
+}
+
+
+
+.sidebar li:last-child a {
+  position: relative;
+  display: block;
+}
+
+.sidebar li:last-child img {
+  margin-top: 300px;
+  margin-right: auto ;
+  left: -5px;
+  width: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sidebar li:last-child span {
+  margin-left: 30px;
+  top: 5px;
+  font-size: 15px;
+}
+
+#TITEL {
+  color: #cbe1ff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+main {
+  margin-left: 220px;
+  padding: 20px;
+}
+.square {
+  width: 100px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bike img {
+  width: 100%;
+  height: 100%; 
+}
+
+.bike-info img {
+  width: 300px; 
+  height: auto; 
+}
+
+.bike-info {
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  box-shadow: 2px 2px 6px rgb(51, 52, 54);
+  transform: translate(-50%, -50%);
+  background-color: #f4f9fe;
+  border-radius: 10px;
+
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-color: #f4f9fe;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #5b5e61;
+  border-top: 1px solid #5b5e61;
+  border-left: 1px solid #5b5e61;
+  border-right: 1px solid #5b5e61;
+  color: #374151;
+}
+
+th {
+  background-color: #f4f9fe;
+  border-color: #5b5e61;
+  color: #374151;
+}
+  
+.bike-price {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #ff9100;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 6px rgb(51, 52, 54);
+  width: 50px; 
+  height: 20px;
+  color: white;
+}
+
+.price-block span {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: right;
+  border-top-left-radius: 10px;
+  padding: 5px;
+  background-color: #f8c40e;
+  color: #ffffff;
+}
+
+
+
+/* producten.html*/
+#bike-type {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #374151;
+  background-color: #f4f9fe;
+  border-radius: 4px;
+  max-width: 160px;
+  max-height: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* producten.html*/
+#bike-type option {
+  padding: 8px;
+  font-size: 16px;
+}
+.prijs {
+  background-color: #ff9100;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 6px rgb(51, 52, 54);
+  height: 20px;
+  width: fit-content;
+  margin: 10px auto;
+  text-align: center;
+  color: white;
+}
+.price {
+  background-color: #ff9100;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 6px rgb(51, 52, 54);
+  margin: 0px auto;
+  color: white;
+}
+
+
+.bestel-link button {
+  background-color: #ff9100; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.bestel-link button:hover {
+  background-color: #374151;
+}
+.vergelijk-nu button {
+  background-color: #ff9100; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.vergelijk-nu button:hover {
+  background-color: #374151;
+}
+
+.header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ff9100;
+  color: #fff;
+  margin-top: -50px;
+  padding: 40px 20px;
+}
+
+.header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.header__description {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #ffffff;
+  max-width: 800px;
+}
+
+.select-container {
+  background-color: #ff9100;
+  color: #fff;
+  padding: 20px;
+  margin-top: -20px;
+}
+
+.select-container label {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #fff;
+}
+
+.select-container select {
+  font-size: 0px;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+}
+
+input[type="checkbox"]:checked + label:after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 100%;
+  background-color: blue;
+  margin-top: 4px;
+}
+
+

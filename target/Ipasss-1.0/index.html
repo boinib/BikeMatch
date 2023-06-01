@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>BikeMatch</title>
+  <link rel="stylesheet" type="text/css" href="Style/style.css">
+  <link rel="stylesheet" type="text/css" href="Style/style-animation.css">
+  <script type="module" src="/functies/index.js" defer></script>
+  <script type="module" src="/functies/navbar.js" defer></script>
+  <script type="text/javascript" src="functies/instellingen.js"></script>
+  <link rel="icon" type="image/x-icon" href="/Images/Logo/logo-color.png">
+</head>
+<body>
+  <header class="header">
+    <div class="header__container">
+      <h1 class="header__title">BikeMatch</h1>
+      <p class="header__description">Welkom bij BikeMatch! Wij zijn gespecialiseerd in fietsen vergelijken en hetverkopen accessoires van hoge kwaliteit.</p>
+    </div>
+  </header>  
+  <div id="navbar-placeholder"></div>
+  <select id="background-select" onchange="changeBackground()"style="display: none;">
+    <option value="default">Standaard achtergrond</option>
+    <option value="background1">Achtergrond 1</option>
+    <option value="background2">Achtergrond 2</option>
+    <option value="background3">Achtergrond 3</option>
+  </select>
+  <main>
+    <section id="bikes-section"></section>
+    <div class="bikes">
+      <div class="bike" data-type="Stadsfiets">
+        <img src="Images/Logo/stadsfiets.jpg" alt="Stadsfiets" class="image">
+        <h3>Stadsfiets</h3>
+        <p>De stadsfiets is de ideale fiets voor dagelijks gebruik in de stad.</p>
+      </div>
+      <div class="bike" data-type="Racefiets">
+        <img src="Images/Logo/racefiets.jpg" alt="Racefiets" class="image">
+        <h3>Racefiets</h3>
+        <p>De racefiets is perfect voor lange afstanden op de weg.</p>
+      </div>
+      <div class="bike" data-type="Mountainbike">
+        <img src="Images/Logo/mountainbike.jpg" alt="Mountainbike" class="image">
+        <h3>Mountainbike</h3>
+        <p>De mountainbike is de ideale fiets voor off-road avonturen.</p>
+      </div>
+      <div class="bike" data-type="E-bike">
+        <img src="Images/Logo/elektrische-fiets.jpg" alt="Elektrische fiets" class="image">
+        <h3>Elektrische fiets</h3>
+        <p>De elektrische fiets is perfect voor het fietsen tegen de wind in.</p>
+      </div>
+    </div>
+  </main>    
+</body>
+</html>

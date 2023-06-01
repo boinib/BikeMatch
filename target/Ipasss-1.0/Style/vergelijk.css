@@ -1,0 +1,112 @@
+/* comparison section */
+#vergelijk-section {
+  padding: 50px;
+  text-align: center;
+}
+
+#vergelijk-section h1 {
+  font-size: 36px;
+  margin-bottom: 50px;
+}
+
+.vergelijk-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 30px;
+  justify-items: center;
+  margin-top: 50px;
+}
+
+.vergelijk-grid .bike {
+  border: 2px solid #ff9100;
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+}
+
+.vergelijk-grid .bike img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.bike-p {
+  top: -10px;
+  left: 100px;
+  background-color: #ff9100;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 6px rgb(51, 52, 54);
+  width: auto; 
+  height: 20px;
+  color: white;
+}
+
+.header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ff9100;
+  color: #fff;
+  padding: 40px 20px;
+}
+
+.header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header__title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.header__description {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #ffffff;
+  max-width: 800px;
+}
+
+.bike-select-container {
+  background-color: #ff9100;
+  color: #fff;
+  padding: 2px;
+  position: fixed;
+  top: 0;
+  left: 160px;
+  right: 0;
+}
+
+.bike-select-container label {
+  font-size: 1rem;
+  margin-right: 1px;
+  color: #fff;
+  margin-right: 16px;
+
+}
+
+.bike-select-container select {
+  font-size: 10px;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+}
+#tweedefiets {
+  background-color: #343434; 
+  color: #fff;
+  border-radius: 40px;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#tweedefiets:hover {
+  background-color: #555;
+}

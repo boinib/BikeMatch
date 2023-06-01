@@ -1,0 +1,54 @@
+@keyframes slidein {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
+  @keyframes slideout {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+  
+  .bike {
+    animation: slideout 0.5s ease-out;
+  }
+  .header {
+    animation: slideout 1s ease-out;
+  }
+  .sidebar {
+    animation: slidein 0.5s ease-out;
+  }
+  .main {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  .main.loaded {
+    opacity: 1;
+  }
+
+  img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  #TITEL:hover {
+    color: #ff9100;
+  }  
+  .sidebar li:last-child img:hover {
+    transform: scale(1.5);
+  }
+  .sidebar li:last-child span:hover {
+    transform: scale(1.1);
+  }
+  .bike-select-container {
+    animation: slideout 0.5s ease-out;
+  }
+  .sidebar a:hover{
+    color: #ff9100;
+  }

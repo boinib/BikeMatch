@@ -1,0 +1,66 @@
+[
+  {
+    "id": "1",
+    "naam": "Fietsbel",
+    "afbeelding": "./Images/Accessoires/fietsbel.jpg",
+    "prijs": "€ 9,99",
+    "beschrijving": "Een stevige fietsbel voor een veilige rit.",
+    "voorraad": 10
+  },
+  {
+    "id": "2",
+    "naam": "Fietsverlichting",
+    "afbeelding": "./Images/Accessoires/fietsverlichting.jpg",
+    "prijs": "€ 19,99",
+    "beschrijving": "Een set heldere fietslampen voor een goede zichtbaarheid in het donker.",
+    "voorraad": 5
+  },
+  {
+    "id": "3",
+    "naam": "Fietspomp",
+    "afbeelding": "./Images/Accessoires/fietspomp.jpg",
+    "prijs": "€ 29.99",
+    "beschrijving": "Een krachtige fietspomp om snel en gemakkelijk je banden op te pompen.",
+    "voorraad": 3
+  },
+  {
+    "id": "4",
+    "naam": "Fietsslot",
+    "afbeelding": "./Images/Accessoires/fietsslot.jpg",
+    "prijs": "€ 39,99",
+    "beschrijving": "Een sterk fietsslot om je fiets veilig te parkeren.",
+    "voorraad": 7
+  },
+  {
+    "id": "5",
+    "naam": "Fietsmand",
+    "afbeelding": "./Images/Accessoires/fietsmand.jpg",
+    "prijs": "€ 24,99",
+    "beschrijving": "Een handige fietsmand om spullen mee te vervoeren tijdens je rit.",
+    "voorraad": 8
+  },
+  {
+    "id": "6",
+    "naam": "Fietshelm",
+    "afbeelding": "./Images/Accessoires/fietshelm.jpg",
+    "prijs": "€ 49,99",
+    "beschrijving": "Een veilige fietshelm om je hoofd te beschermen tijdens het fietsen.",
+    "voorraad": 2
+  },
+  {
+    "id": "7",
+    "naam": "Fietscomputer",
+    "afbeelding": "./Images/Accessoires/fietscomputer.jpg",
+    "prijs": "€ 89,99",
+    "beschrijving": "Een handige fietscomputer om je snelheid, afstand, navigatie en andere gegevens bij te houden.",
+    "voorraad": 4
+  },
+  {
+    "id": "8",
+    "naam": "Fietsstandaard",
+    "afbeelding": "./Images/Accessoires/fietsstandaard.jpg",
+    "prijs": "€ 34,99",
+    "beschrijving": "Een stevige fietsstandaard om je fiets stabiel neer te zetten.",
+    "voorraad": 6
+  }
+]
