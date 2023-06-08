@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +26,16 @@ public class Producten {
     }
 
     private Producten() {
-        loadAccessoiresFromJson("C:\\Users\\ielma\\IdeaProjects\\Ipasss\\src\\main\\java\\accessoires.json");
-        loadProductsFromJson("C:\\Users\\ielma\\IdeaProjects\\Ipasss\\src\\main\\java\\fietsen.json");
+        loadAccessoiresFromJson("accessoires.json");
+        loadProductsFromJson("fietsen.json");
     }
 
     private void loadAccessoiresFromJson(String bestand) {
         try {
-            File file = new File(bestand);
+            File file = getResourceFile(bestand);
+            String acJson = readFileContent(file);
             ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jn = objectMapper.readTree(file);
+            JsonNode jn = objectMapper.readTree(acJson);
             if (jn.isArray()) {
                 for (JsonNode accessoirejson : jn) {
                     Accessoires accessoire = createAccessoire(accessoirejson);
@@ -42,6 +46,7 @@ public class Producten {
             e.printStackTrace();
         }
     }
+
 
     private Accessoires createAccessoire(JsonNode jn) {
         String id = getStringValue(jn, "id");
@@ -55,7 +60,7 @@ public class Producten {
 
     private void loadProductsFromJson(String bestand) {
         try {
-            File file = new File(bestand);
+            File file = getResourceFile(bestand);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jn = objectMapper.readTree(file);
             if (jn.isArray()) {
@@ -68,6 +73,7 @@ public class Producten {
             e.printStackTrace();
         }
     }
+
 
     private Fiets createFiets(JsonNode jn) {
         String id = getStringValue(jn, "id");
@@ -141,6 +147,29 @@ public class Producten {
             }
         }
         return null;
+    }
+    private File getResourceFile(final String fileName)
+    {
+        URL url = this.getClass()
+                .getClassLoader()
+                .getResource(fileName);
+
+        if(url == null) {
+            throw new IllegalArgumentException(fileName + " not found!");
+        }
+
+        File file = new File(url.getFile());
+
+        return file;
+    }
+    private String readFileContent(File file) {
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            return new String(bytes, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

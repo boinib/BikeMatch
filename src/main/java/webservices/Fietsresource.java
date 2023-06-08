@@ -2,6 +2,12 @@ package webservices;
 
 
 
+import com.azure.core.util.BinaryData;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobStorageException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -13,9 +19,10 @@ import javax.json.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
+import java.net.URL;
+
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.List;
 
@@ -23,7 +30,6 @@ import java.util.List;
 @Path("/fiets")
 
 public class Fietsresource {
-    private static final String afspraakfile = "C:\\Users\\ielma\\IdeaProjects\\Ipasss\\src\\main\\java\\afspraak.json";
 
     // TODO: Realiseer hier de gevraagde webservices!
 
@@ -76,6 +82,11 @@ public class Fietsresource {
         List<Fiets> fietsen = producten.getFietsByType(fietsType);
         return allcountries(fietsen).toString();
     }
+
+    private static final String STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net";
+    private static final String CONTAINER_NAME = "blobipass";
+    private static final String BLOB_NAME = "afspraak.json";
+
     @POST
     @Path("/nieuweAfspraak")
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,45 +109,78 @@ public class Fietsresource {
                 return Response.status(409).entity(error).build();
             }
 
-            String filePath = "C:\\Users\\ielma\\IdeaProjects\\Ipasss\\afspraak.json";
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            JsonNode bestaandeData = mapper.readTree(new File(filePath));
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(STORAGE_CONNECTION_STRING).buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
 
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
 
-            ObjectNode afspraakNode = mapper.createObjectNode();
-            afspraakNode.put("naam", afspraak.getGebruiker().getNaam());
-            afspraakNode.put("email", afspraak.getGebruiker().getEmail());
-            afspraakNode.put("telefoon", afspraak.getGebruiker().getTelefoonnummer());
-            afspraakNode.put("datum", afspraak.getDatum());
-            afspraakNode.put("tijd", afspraak.getTijd());
-            afspraakNode.put("opmerking", afspraak.getOpmerking());
+                JsonReader jsonReader = Json.createReader(new ByteArrayInputStream(existingData));
+                JsonArray bestaandeAfspraken = jsonReader.readArray();
+                System.out.println(bestaandeAfspraken);
+                jsonReader.close();
 
-            ArrayNode nieuweData = mapper.createArrayNode();
+                JsonObject nieuweAfspraak = Json.createObjectBuilder()
+                        .add("naam", afspraakNaam)
+                        .add("email", afspraakEmail)
+                        .add("telefoon", afspraakTelefoon)
+                        .add("datum", datum)
+                        .add("tijd", tijd)
+                        .add("opmerking", opmerking)
+                        .build();
 
-            if (bestaandeData.isArray()) {
-                for (JsonNode node : bestaandeData) {
-                    nieuweData.add(node);
+                JsonArrayBuilder afsprakenBuilder = Json.createArrayBuilder();
+                afsprakenBuilder.add(nieuweAfspraak);
+                for (JsonValue bestaandeAfspraak : bestaandeAfspraken) {
+                    afsprakenBuilder.add(bestaandeAfspraak);
                 }
-            } else if (!bestaandeData.isEmpty()) {
-                nieuweData.add(bestaandeData);
+
+                JsonArray bijgewerkteAfspraken = afsprakenBuilder.build();
+
+                String bijgewerkteJson = bijgewerkteAfspraken.toString();
+                System.out.println(bijgewerkteJson);
+
+                blobClient.upload(BinaryData.fromStream(new ByteArrayInputStream(bijgewerkteJson.getBytes(StandardCharsets.UTF_8))));
+
+            } else {
+                JsonArray afspraken = Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("naam", afspraakNaam)
+                                .add("email", afspraakEmail)
+                                .add("telefoon", afspraakTelefoon)
+                                .add("datum", datum)
+                                .add("tijd", tijd)
+                                .add("opmerking", opmerking)
+                                .build())
+                        .build();
+
+                String afsprakenJson = afspraken.toString();
+
+                blobClient.upload(BinaryData.fromStream(new ByteArrayInputStream(afsprakenJson.getBytes(StandardCharsets.UTF_8))));
+
             }
 
-            nieuweData.add(afspraakNode);
-            mapper.writeValue(new File(filePath), nieuweData);
         } catch (JsonException e) {
             e.printStackTrace();
             return Response.status(400).build();
-        } catch (IOException e) {
+        } catch (BlobStorageException e) {
             e.printStackTrace();
             return Response.status(500).build();
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "http://127.0.0.1:5501/afspraak.html")
+                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST")
                 .header("Access-Control-Allow-Headers", "Content-Type")
                 .build();
     }
+
+
+
+
+
 
     private JsonArray allcountries(List<Fiets> countries) {
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();

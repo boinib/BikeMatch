@@ -49,11 +49,11 @@
 let url;
 
     if (geselecteerdeType === "Overige") {
-      url = 'http://localhost:8080/restservices/fiets/type/overige';
+      url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/type/overige';
     } else if (geselecteerdeType !== "") {
-      url = `http://localhost:8080/restservices/fiets/type/${geselecteerdeType}`;
+      url = `https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/type/${geselecteerdeType}`;
     } else {
-      url = 'http://localhost:8080/restservices/fiets';
+      url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets';
     }        const response = await fetch(url, {
           method: 'GET',
           headers: {'Content-Type': 'application/json'}});
@@ -65,7 +65,7 @@ let url;
         const fietsen = await response.json();
         
         //voor de aantallen type in de selectiebox
-        const URLvoorLengte = 'http://localhost:8080/restservices/fiets';
+        const URLvoorLengte = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets';
         const lengteResponse = await fetch(URLvoorLengte);
         const LengteFietsen = await lengteResponse.json();
         console.log(LengteFietsen);

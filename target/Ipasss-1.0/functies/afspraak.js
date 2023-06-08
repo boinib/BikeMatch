@@ -7,7 +7,7 @@ document.querySelector("#postAfs").addEventListener("click", function (event) {
         request[key] = value;
     });
 
-    fetch("http://localhost:8080/restservices/fiets/nieuweAfspraak", {
+    fetch("https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/nieuweAfspraak", {
         method: "POST",
         body: JSON.stringify(request),
         headers: { 'Content-Type': 'application/json' }
