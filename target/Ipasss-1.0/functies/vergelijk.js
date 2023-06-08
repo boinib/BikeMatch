@@ -2,7 +2,7 @@ let aantal = 0;
 let gekozen = [];
 
 export async function getFietsById(id) {
-  const url = `http://localhost:8080/restservices/fiets/${id}`;
+  const url = `https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/${id}`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {'Content-Type': 'application/json'}
@@ -17,7 +17,7 @@ export async function getFietsById(id) {
 }
 
 export async function getFietsen() {
-  const url = 'http://localhost:8080/restservices/fiets';
+  const url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets';
   const response = await fetch(url, {
     method: 'GET',
     headers: {'Content-Type': 'application/json'}

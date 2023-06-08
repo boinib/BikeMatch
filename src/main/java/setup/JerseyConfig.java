@@ -7,6 +7,6 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("restservices")
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
-        packages("C:\\Users\\ielma\\IdeaProjects\\Ipasss\\src\\main\\java\\webservices");
+        packages("webservices");
     }
 }

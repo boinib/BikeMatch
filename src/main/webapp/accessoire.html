@@ -25,7 +25,7 @@
   </main>
   <script type="text/javascript">
     function getAccessoireById(id) {
-      const url = `http://localhost:8080/restservices/fiets/accessoires/${id}`;
+      const url = `https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/accessoires/${id}`;
       return fetch(url)
         .then(response => {
           if (!response.ok) {
