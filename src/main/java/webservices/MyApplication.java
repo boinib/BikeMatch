@@ -12,6 +12,10 @@ public class MyApplication extends Application {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(CorsFilter.class);
         classes.add(Fietsresource.class);
+        classes.add(AfspraakResource.class);
+        classes.add(AccessoireResource.class);
+
+
         return classes;
     }
 }

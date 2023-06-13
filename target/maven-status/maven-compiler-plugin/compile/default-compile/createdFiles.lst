@@ -6,8 +6,10 @@ module\Websiteeigenaar.class
 module\Gebruiker.class
 webservices\Fietsresource.class
 module\Producten.class
+webservices\AccessoireResource.class
 module\Accessoires.class
 webservices\CorsFilter.class
+webservices\AfspraakResource.class
 setup\JerseyConfig.class
 module\Main.class
 module\Fiets.class
