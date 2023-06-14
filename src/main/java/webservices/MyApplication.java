@@ -1,5 +1,7 @@
 package webservices;
 
+import security.AuthenticationResource;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -14,6 +16,8 @@ public class MyApplication extends Application {
         classes.add(Fietsresource.class);
         classes.add(AfspraakResource.class);
         classes.add(AccessoireResource.class);
+        classes.add(AuthenticationResource.class);
+
 
 
         return classes;

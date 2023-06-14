@@ -13,7 +13,7 @@
     color: #333;
   }
   
-  .container input[type="text"],
+  .container input[type="email"],
   .container input[type="password"] {
     width: 100%;
     max-width: 250px;

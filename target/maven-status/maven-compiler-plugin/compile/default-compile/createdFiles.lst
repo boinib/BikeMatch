@@ -1,8 +1,8 @@
 module\WinkelwagenProduct.class
 webservices\MyApplication.class
+security\AuthenticationResource.class
 module\Klant.class
 module\Winkeleigenaar.class
-module\Websiteeigenaar.class
 module\Gebruiker.class
 webservices\Fietsresource.class
 module\Producten.class
@@ -13,5 +13,4 @@ webservices\AfspraakResource.class
 setup\JerseyConfig.class
 module\Main.class
 module\Fiets.class
-org\example\App.class
 module\Afspraak.class
