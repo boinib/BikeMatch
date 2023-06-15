@@ -13,8 +13,7 @@
     color: #333;
   }
   
-  .container input[type="email"],
-  .container input[type="password"] {
+  .container input{
     width: 100%;
     max-width: 250px;
     padding: 10px;
@@ -42,7 +41,7 @@
   }
   
   .container input[type="submit"]:focus {
-    outline: none;
+    background-color: grey;
   }
   .container .back-button {
     width: 40px;
@@ -64,5 +63,9 @@
   
   .container .back-button:hover {
     background-color: #d47a05;
+  }
+  
+  .container .back-button:focus {
+    background-color: grey;
   }
     

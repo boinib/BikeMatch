@@ -1,20 +1,22 @@
 package module;
 
+import javax.security.auth.Subject;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gebruiker {
+public class Gebruiker implements Principal {
     private String naam;
     private String email;
     private String telefoonnummer;
     private static String wachtwoord;
     private static String role;
 
-    private static List<Gebruiker> alleGebruikers = new ArrayList<>();
+    private static List<Gebruiker> alleGebruikers;
 
-    static{
-        alleGebruikers =  new ArrayList<>();
-        alleGebruikers.add(new Gebruiker("amin","amin@hoofd.nl","112","geheim","admin"));
+    static {
+        alleGebruikers = new ArrayList<>();
+        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim", "admin"));
     }
 
     public Gebruiker(String naam, String email, String telefoonnummer, String wachtwoord, String role) {
@@ -27,6 +29,16 @@ public class Gebruiker {
 
     public Gebruiker() {
     }
+
+    public static Gebruiker getUserByName(String naam) {
+        for (Gebruiker gebruiker : alleGebruikers) {
+            if (gebruiker.naam.equals(naam)) {
+                return gebruiker;
+            }
+        }
+        return null;
+    }
+
     public String getNaam() {
         return naam;
     }
@@ -73,11 +85,21 @@ public class Gebruiker {
                 return gebruiker.getRole();
             }
         }
-        return null; // Inloggegevens ongeldig
+        return null; // Invalid login credentials
     }
 
     @Override
     public String toString() {
         return "Gebruiker [naam=" + naam + ", email=" + email + ", telefoon=" + telefoonnummer + "]";
+    }
+
+    @Override
+    public String getName() {
+        return naam;
+    }
+
+    @Override
+    public boolean implies(Subject subject) {
+        return Principal.super.implies(subject);
     }
 }

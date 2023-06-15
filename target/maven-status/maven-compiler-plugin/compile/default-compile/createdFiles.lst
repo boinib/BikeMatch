@@ -10,6 +10,8 @@ webservices\AccessoireResource.class
 module\Accessoires.class
 webservices\CorsFilter.class
 webservices\AfspraakResource.class
+security\MySecurityContext.class
+security\AuthenticationFilter.class
 setup\JerseyConfig.class
 module\Main.class
 module\Fiets.class
