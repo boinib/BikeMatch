@@ -26,8 +26,14 @@ public class AuthenticationResource {
         String role = Gebruiker.validateLogin(username, pass);
         if (role == null) throw new IllegalArgumentException("No user found");
         String token = createToken(username, role);
-        return Response.ok(new SimpleEntry<>("abc", token)).build();}
-
+        if ("admin".equals(role)) {
+            return Response.status(Response.Status.OK)
+                    .entity(new SimpleEntry<>("adminCode", token))
+                    .build();
+        } else {
+            return Response.ok(new SimpleEntry<>("abc", token)).build();
+        }
+    }
     private String createToken(String username, String role) {
         Calendar expiration = Calendar.getInstance();
         expiration.add(Calendar.MINUTE, 30);

@@ -38,7 +38,14 @@
         let myJson = await response.json();
         window.sessionStorage.setItem("JWT", myJson.JWT);
         window.sessionStorage.setItem("username", myJson.username);
-        window.location.href = "index.html";
+        
+        if (myJson.adminCode) {
+          // Redirect to admin.html if the user is an admin
+          window.location.href = "admin.html";
+        } else {
+          // Redirect to index.html for non-admin users
+          window.location.href = "index.html";
+        }
       } else {
         document.querySelector("#login_error").style.display = "block";
         console.log("Login failed");

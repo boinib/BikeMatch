@@ -12,6 +12,7 @@ document.addEventListener("load", event =>{
         if(response.status === 200){
             let myJson = response.json();
             window.sessionStorage.setItem("abc",myJson.JWT)
+            
         }else{
             console.log("Login failed")
         }

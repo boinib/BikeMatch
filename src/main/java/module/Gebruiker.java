@@ -9,14 +9,16 @@ public class Gebruiker implements Principal {
     private String naam;
     private String email;
     private String telefoonnummer;
-    private static String wachtwoord;
-    private static String role;
+    private String wachtwoord;
+    private String role;
 
     private static List<Gebruiker> alleGebruikers;
 
     static {
         alleGebruikers = new ArrayList<>();
         alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim", "admin"));
+        alleGebruikers.add(new Gebruiker("reda", "reda@hoofd.nl", "112", "geheim1", "klant"));
+
     }
 
     public Gebruiker(String naam, String email, String telefoonnummer, String wachtwoord, String role) {
@@ -63,20 +65,20 @@ public class Gebruiker implements Principal {
         this.telefoonnummer = telefoonnummer;
     }
 
-    public static String getWachtwoord() {
+    public String getWachtwoord() {
         return wachtwoord;
     }
 
     public void setWachtwoord(String wachtwoord) {
-        Gebruiker.wachtwoord = wachtwoord;
+        this.wachtwoord = wachtwoord;
     }
 
-    public static String getRole() {
+    public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
-        Gebruiker.role = role;
+        this.role = role;
     }
 
     public static String validateLogin(String email, String wachtwoord) {
