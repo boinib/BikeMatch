@@ -173,4 +173,20 @@ public class Producten {
     }
 
 
+    public String addFiets(Fiets nieuweFiets) {
+        String fietsId = generateFietsId();
+
+        nieuweFiets.setId(fietsId);
+
+        alleProducten.add(nieuweFiets);
+
+        return fietsId;
+    }
+
+    private String generateFietsId() {
+
+        int nextId = alleProducten.size() + 1;
+        return String.valueOf(nextId);
+    }
+
 }

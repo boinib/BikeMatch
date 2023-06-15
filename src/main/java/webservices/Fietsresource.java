@@ -3,6 +3,8 @@ package webservices;
 import module.*;
 import javax.json.*;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 
@@ -94,6 +96,21 @@ public class Fietsresource {
                 .add("link", fiets.getLink());
 
         return job.build().toString();
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response voegFietsToe(Fiets nieuweFiets) {
+        Producten producten = Producten.getProduct();
+        String fietsId = producten.addFiets(nieuweFiets);
+
+        JsonObject responseJson = Json.createObjectBuilder()
+                .add("id", fietsId)
+                .build();
+
+        return Response.status(Response.Status.CREATED)
+                .entity(responseJson)
+                .build();
     }
 }
 
