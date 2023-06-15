@@ -16,6 +16,7 @@
       <input id="username" type="email" name="username" placeholder="E-mail" required>
       <input id="password" type="password" name="password" placeholder="Wachtwoord" required>
       <input id="login_button" type="submit" value="Inloggen">
+      <p id="login_error" style="color: red; display: none;">Ongeldige gebruikersnaam of wachtwoord</p>
     </form>
   </div>
 
@@ -25,18 +26,21 @@
     });
 
     async function login(event) {
-      event.preventDefault(); // Annuleer het standaardgedrag van het formulier
+      event.preventDefault(); 
 
       console.log("login");
       var formData = new FormData(document.querySelector("#formLogin"));
       var encData = new URLSearchParams(formData.entries());
-      
+
       let response = await fetch("https://ipasss-1685617513032.azurewebsites.net/restservices/login", { method: "POST", body: encData });
 
       if (response.status === 200) {
         let myJson = await response.json();
-        window.sessionStorage.setItem("abc", myJson.JWT);
+        window.sessionStorage.setItem("JWT", myJson.JWT);
+        window.sessionStorage.setItem("username", myJson.username);
+        window.location.href = "index.html";
       } else {
+        document.querySelector("#login_error").style.display = "block";
         console.log("Login failed");
       }
     }
