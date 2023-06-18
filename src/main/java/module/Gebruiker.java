@@ -16,7 +16,7 @@ public class Gebruiker implements Principal {
 
     static {
         alleGebruikers = new ArrayList<>();
-        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim", "admin"));
+        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim1", "admin"));
         alleGebruikers.add(new Gebruiker("reda", "reda@hoofd.nl", "112", "geheim1", "klant"));
 
     }

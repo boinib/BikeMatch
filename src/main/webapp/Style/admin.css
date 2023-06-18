@@ -1,0 +1,56 @@
+/* Style for the container */
+.container {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Style for the heading */
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Style for the back button */
+  .back-button {
+    font-size: 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  /* Style for the menu buttons */
+  .menu button {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  /* Style for the menu buttons on hover */
+  .menu button:hover {
+    background-color: #0069d9;
+  }
+  
+  /* Style for the links in the menu */
+  .menu a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  /* Style for the links in the menu on hover */
+  .menu a:hover {
+    text-decoration: underline;
+  }
+  

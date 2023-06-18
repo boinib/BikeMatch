@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Fiets toevoegen</title>
+  <link rel="stylesheet" type="text/css" href="Style/style.css">
+  <link rel="stylesheet" type="text/css" href="Style/style-animation.css">
+  <link rel="stylesheet" type="text/css" href="Style/addfiets.css">
+  <script type="module" src="/functies/addfiets.js" defer></script>
+  <link rel="icon" type="image/x-icon" href="/Images/Logo/logo-color.png">
+</head>
+<body>
+  <h1>Fiets toevoegen</h1>
+
+  <form id="addFietsForm">
+    <label for="merk">Merk:</label>
+    <input type="text" id="merk" name="merk" required><br>
+
+    <label for="type">Type:</label>
+    <input type="text" id="type" name="type" required><br>
+
+    <label for="beschrijving">Beschrijving:</label>
+    <textarea id="beschrijving" name="beschrijving" required></textarea><br>
+
+    <label for="gewicht">Gewicht:</label>
+    <input type="text" id="gewicht" name="gewicht" required><br>
+
+    <label for="versnellingen">Versnellingen:</label>
+    <input type="number" id="versnellingen" name="versnellingen" required><br>
+
+    <label for="wielmaat">Wielmaat:</label>
+    <input type="text" id="wielmaat" name="wielmaat" required><br>
+
+    <label for="framemaat">Framemaat:</label>
+    <input type="text" id="framemaat" name="framemaat" required><br>
+
+    <label for="materiaalFrame">Materiaal frame:</label>
+    <input type="text" id="materiaalFrame" name="materiaalFrame" required><br>
+
+    <label for="voorvork">Voorvork:</label>
+    <input type="text" id="voorvork" name="voorvork" required><br>
+
+    <label for="verlichting">Verlichting:</label>
+    <input type="text" id="verlichting" name="verlichting" required><br>
+
+    <label for="bagagedrager">Bagagedrager:</label>
+    <input type="text" id="bagagedrager" name="bagagedrager" required><br>
+
+    <label for="remmen">Remmen:</label>
+    <input type="text" id="remmen" name="remmen" required><br>
+
+    <label for="slot">Slot:</label>
+    <input type="text" id="slot" name="slot" required><br>
+
+    <label for="prijs">Prijs:</label>
+    <input type="number" id="prijs" name="prijs" required><br>
+
+    <label for="link">Bestelpagina link:</label>
+    <input type="text" id="link" name="link" required><br>
+
+    <label for="afbeelding">Afbeelding:</label>
+    <input type="text" id="afbeelding" name="afbeelding" required><br>
+    <input type="submit" value="Fiets toevoegen">
+  </form>
+</body>
+</html>
