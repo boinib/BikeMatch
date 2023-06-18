@@ -87,7 +87,7 @@ public class AfspraakResource {
                 String bijgewerkteJson = bijgewerkteAfspraken.toString();
                 System.out.println(bijgewerkteJson);
 
-                blobClient.upload(BinaryData.fromStream(new ByteArrayInputStream(bijgewerkteJson.getBytes(StandardCharsets.UTF_8))));
+                blobClient.upload(BinaryData.fromStream(new ByteArrayInputStream(bijgewerkteJson.getBytes(StandardCharsets.UTF_8)), (long) existingData.length), true);
 
             } else {
                 JsonArray afspraken = Json.createArrayBuilder()

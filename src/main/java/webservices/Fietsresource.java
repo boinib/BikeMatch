@@ -1,18 +1,27 @@
 package webservices;
 
+import com.azure.core.util.BinaryData;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobStorageException;
 import module.*;
 import javax.json.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.*;
 import java.util.List;
 
 
 @Path("/fiets")
 
 public class Fietsresource {
+    private static final String STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net";
+    private static final String CONTAINER_NAME = "blobipass";
+    private static final String BLOB_NAME = "fiets.json";
 
-    // TODO: Realiseer hier de gevraagde webservices!
 
     @GET
     @Produces("application/json")
@@ -20,7 +29,7 @@ public class Fietsresource {
         Producten producten = Producten.getProduct();
         System.out.println("a");
         List<Fiets> countries = producten.getAllProducts();
-        return allcountries(countries).toString();
+        return alleFietsen(countries).toString();
     }
 
 
@@ -39,16 +48,17 @@ public class Fietsresource {
         Fiets fiets = producten.getFietsById(fietsId);
         return fietsById(fiets).toString();
     }
+
     @GET
     @Path("type/{type}")
     @Produces("application/json")
     public String fietsByType(@PathParam("type") String fietsType) {
         Producten producten = Producten.getProduct();
         List<Fiets> fietsen = producten.getFietsByType(fietsType);
-        return allcountries(fietsen).toString();
+        return alleFietsen(fietsen).toString();
     }
 
-    private JsonArray allcountries(List<Fiets> countries) {
+    private JsonArray alleFietsen(List<Fiets> countries) {
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         for (Fiets country : countries) {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -98,18 +108,130 @@ public class Fietsresource {
         return job.build().toString();
     }
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response voegFietsToe(Fiets nieuweFiets) {
-        Producten producten = Producten.getProduct();
-        String fietsId = producten.addFiets(nieuweFiets);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addFiets(String fietsData) {
+        try {
+            JsonObject jsonData = Json.createReader(new StringReader(fietsData)).readObject();
+            String fietsMerk = jsonData.getString("merk");
+            String fietsType = jsonData.getString("type");
+            String fietsPrijs = jsonData.getString("prijs");
+            String fietsGewicht = jsonData.getString("gewicht");
+            String fietsVersnellingen = jsonData.getString("versnellingen");
+            String fietsRemmen = jsonData.getString("remmen");
+            String fietsBeschrijving = jsonData.getString("beschrijving");
+            String fietsAfbeelding = jsonData.getString("afbeelding");
+            String fietsWielmaat = jsonData.getString("wielmaat");
+            String fietsFramemaat = jsonData.getString("framemaat");
+            String fietsMateriaalFrame = jsonData.getString("materiaalFrame");
+            String fietsVoorvork = jsonData.getString("voorvork");
+            String fietsVerlichting = jsonData.getString("verlichting");
+            String fietsBagagedrager = jsonData.getString("bagagedrager");
+            String fietsSlot = jsonData.getString("slot");
+            String fietsLink = jsonData.getString("link");
 
-        JsonObject responseJson = Json.createObjectBuilder()
-                .add("id", fietsId)
-                .build();
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(STORAGE_CONNECTION_STRING).buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
 
-        return Response.status(Response.Status.CREATED)
-                .entity(responseJson)
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
+                outputStream.close();
+
+                JsonReader jsonReader = Json.createReader(new ByteArrayInputStream(existingData));
+                JsonArray bestaandeFietsen = jsonReader.readArray();
+                jsonReader.close();
+
+                String fietsId = String.valueOf(bestaandeFietsen.size() + 1);
+
+                JsonObject nieuweFiets = Json.createObjectBuilder()
+                        .add("id", fietsId)
+                        .add("merk", fietsMerk)
+                        .add("type", fietsType)
+                        .add("prijs", fietsPrijs)
+                        .add("gewicht", fietsGewicht)
+                        .add("versnellingen", fietsVersnellingen)
+                        .add("remmen", fietsRemmen)
+                        .add("beschrijving", fietsBeschrijving)
+                        .add("afbeelding", fietsAfbeelding)
+                        .add("wielmaat", fietsWielmaat)
+                        .add("framemaat", fietsFramemaat)
+                        .add("materiaalFrame", fietsMateriaalFrame)
+                        .add("voorvork", fietsVoorvork)
+                        .add("verlichting", fietsVerlichting)
+                        .add("bagagedrager", fietsBagagedrager)
+                        .add("slot", fietsSlot)
+                        .add("link", fietsLink)
+                        .build();
+
+                JsonArrayBuilder fietsenBuilder = Json.createArrayBuilder();
+                fietsenBuilder.add(nieuweFiets);
+                for (JsonValue bestaandeFiets : bestaandeFietsen) {
+                    fietsenBuilder.add(bestaandeFiets);
+                }
+
+                JsonArray updatedFietsen = fietsenBuilder.build();
+
+                ByteArrayOutputStream updatedStream = new ByteArrayOutputStream();
+                JsonWriter jsonWriter = Json.createWriter(updatedStream);
+                jsonWriter.writeArray(updatedFietsen);
+                jsonWriter.close();
+
+                byte[] updatedData = updatedStream.toByteArray();
+                updatedStream.close();
+
+                blobClient.upload(BinaryData.fromBytes(updatedData), true);
+            } else {
+                String fietsId = "1";
+
+                JsonArray fietsen = Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("id", fietsId)
+                                .add("merk", fietsMerk)
+                                .add("type", fietsType)
+                                .add("prijs", fietsPrijs)
+                                .add("gewicht", fietsGewicht)
+                                .add("versnellingen", fietsVersnellingen)
+                                .add("remmen", fietsRemmen)
+                                .add("beschrijving", fietsBeschrijving)
+                                .add("afbeelding", fietsAfbeelding)
+                                .add("wielmaat", fietsWielmaat)
+                                .add("framemaat", fietsFramemaat)
+                                .add("materiaalFrame", fietsMateriaalFrame)
+                                .add("voorvork", fietsVoorvork)
+                                .add("verlichting", fietsVerlichting)
+                                .add("bagagedrager", fietsBagagedrager)
+                                .add("slot", fietsSlot)
+                                .add("link", fietsLink)
+                                .build())
+                        .build();
+
+                ByteArrayOutputStream fietsenStream = new ByteArrayOutputStream();
+                JsonWriter jsonWriter = Json.createWriter(fietsenStream);
+                jsonWriter.writeArray(fietsen);
+                jsonWriter.close();
+
+                byte[] fietsenData = fietsenStream.toByteArray();
+                fietsenStream.close();
+
+                blobClient.upload(BinaryData.fromBytes(fietsenData));
+            }
+
+        } catch (JsonException e) {
+            e.printStackTrace();
+            return Response.status(400).build();
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+            return Response.status(500).build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST")
+                .header("Access-Control-Allow-Headers", "Content-Type")
                 .build();
     }
 }
