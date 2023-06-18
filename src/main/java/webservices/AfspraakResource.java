@@ -32,7 +32,6 @@ public class AfspraakResource {
     private static final String BLOB_NAME = "afspraak.json";
 
     @POST
-    @Path("/nieuweAfspraak")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addAfspraak(String afspraakData) {
