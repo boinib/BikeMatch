@@ -5,4 +5,4 @@ Het doel van het BikeMatch-project is het ontwikkelen van zo'n website. Gebruike
 
 Met de website wordt het probleem opgelost dat consumenten vaak veel tijd kwijt zijn aan het vinden van een geschikte fiets bij verschillende fietsenwinkels in de buurt. BikeMatch zorgt ervoor dat consumenten snel en eenvoudig de fiets vinden die ze zoeken. Daarnaast biedt het platform ook de mogelijkheid om accessoires te kopen en reparatieafspraken te maken bij de fietsenwinkels.
 
-![BikeMatch logo](./Images/Logo/logo-color.png)
+![BikeMatch logo](/src/main/webapp/Images/Logo/logo-color.png)
