@@ -1,13 +1,12 @@
 package module;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,27 +25,34 @@ public class Producten {
     }
 
     private Producten() {
-        loadAccessoiresFromJson("accessoires.json");
-        loadProductsFromJson("fietsen.json");
+        loadAccessoiresFromBlob();
+        loadProductsFromBlob();
     }
 
-    private void loadAccessoiresFromJson(String bestand) {
+    private void loadAccessoiresFromBlob() {
         try {
-            File file = getResourceFile(bestand);
-            String acJson = readFileContent(file);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jn = objectMapper.readTree(acJson);
-            if (jn.isArray()) {
-                for (JsonNode accessoirejson : jn) {
-                    Accessoires accessoire = createAccessoire(accessoirejson);
-                    accessoires.add(accessoire);
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString("DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net")
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient("blobipass");
+            BlobClient blobClient = containerClient.getBlobClient("accessoire.json");
+
+            if (blobClient.exists()) {
+                String jsonContent = blobClient.downloadContent().toString();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jn = objectMapper.readTree(jsonContent);
+
+                if (jn.isArray()) {
+                    for (JsonNode accessoirejson : jn) {
+                        Accessoires accessoire = createAccessoire(accessoirejson);
+                        accessoires.add(accessoire);
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     private Accessoires createAccessoire(JsonNode jn) {
         String id = getStringValue(jn, "id");
@@ -55,18 +61,27 @@ public class Producten {
         String prijs = getStringValue(jn, "prijs");
         String beschrijving = getStringValue(jn, "beschrijving");
         String voorraad = getStringValue(jn, "voorraad");
-        return new Accessoires(id,naam, afbeelding, prijs, beschrijving, voorraad);
+        return new Accessoires(id, naam, afbeelding, prijs, beschrijving, voorraad);
     }
 
-    private void loadProductsFromJson(String bestand) {
+    private void loadProductsFromBlob() {
         try {
-            File file = getResourceFile(bestand);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jn = objectMapper.readTree(file);
-            if (jn.isArray()) {
-                for (JsonNode fietsen : jn) {
-                    Fiets fiets = createFiets(fietsen);
-                    alleProducten.add(fiets);
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString("DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net")
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient("blobipass");
+            BlobClient blobClient = containerClient.getBlobClient("fiets.json");
+
+            if (blobClient.exists()) {
+                String jsonContent = blobClient.downloadContent().toString();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jn = objectMapper.readTree(jsonContent);
+
+                if (jn.isArray()) {
+                    for (JsonNode fietsen : jn) {
+                        Fiets fiets = createFiets(fietsen);
+                        alleProducten.add(fiets);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -148,29 +163,4 @@ public class Producten {
         }
         return null;
     }
-    private File getResourceFile(final String fileName)
-    {
-        URL url = this.getClass()
-                .getClassLoader()
-                .getResource(fileName);
-
-        if(url == null) {
-            throw new IllegalArgumentException(fileName + " not found!");
-        }
-
-        File file = new File(url.getFile());
-
-        return file;
-    }
-    private String readFileContent(File file) {
-        try {
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            return new String(bytes, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
 }

@@ -1,5 +1,7 @@
 package module;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 public class Fiets {
     private String id;
     private String merk;
@@ -19,6 +21,7 @@ public class Fiets {
     private String slot;
     private String link;
 
+    @JsonIgnore
     public Fiets(String id, String merk, String type, String prijs, String gewicht, String versnellingen, String remmen, String beschrijving, String afbeelding, String wielmaat, String framemaat, String materiaalframe, String voorvork, String verlichting, String bagagedrager, String slot, String link) {
         this.id = id;
         this.merk = merk;

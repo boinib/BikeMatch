@@ -12,7 +12,7 @@ function showAccessoires(accessoires) {
   document.querySelector('.accessoires').innerHTML = accessoireElements.join('');
 }
 async function getAccessoires() {
-  const url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/accessoires';
+  const url = '/restservices/accessoires';
   
   try {
     const response = await fetch(url, {

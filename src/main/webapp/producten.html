@@ -10,6 +10,12 @@
   <script type="module" src="functies/navbar.js" defer></script>
 </head>
 <body>
+  <header class="header">
+    <div class="topbar">
+      <a id="login-button" href="login.html" class="login-button">Login</a>
+      <span id="user-info"></span>
+    </div>      
+  </header>  
   <div id="navbar-placeholder"></div>
   <select id="background-select" onchange="changeBackground()"style="display: none;">
     <option value="default">Standaard achtergrond</option>
@@ -49,11 +55,11 @@
 let url;
 
     if (geselecteerdeType === "Overige") {
-      url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/type/overige';
+      url = '/restservices/fiets/type/overige';
     } else if (geselecteerdeType !== "") {
-      url = `https://ipasss-1685617513032.azurewebsites.net/restservices/fiets/type/${geselecteerdeType}`;
+      url = `/restservices/fiets/type/${geselecteerdeType}`;
     } else {
-      url = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets';
+      url = '/restservices/fiets';
     }        const response = await fetch(url, {
           method: 'GET',
           headers: {'Content-Type': 'application/json'}});
@@ -65,7 +71,7 @@ let url;
         const fietsen = await response.json();
         
         //voor de aantallen type in de selectiebox
-        const URLvoorLengte = 'https://ipasss-1685617513032.azurewebsites.net/restservices/fiets';
+        const URLvoorLengte = '/restservices/fiets';
         const lengteResponse = await fetch(URLvoorLengte);
         const LengteFietsen = await lengteResponse.json();
         console.log(LengteFietsen);

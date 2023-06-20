@@ -1,20 +1,47 @@
 package module;
 
-public class Gebruiker {
-    private static String naam;
-    private static String email;
-    private static String telefoonnummer;
+import javax.security.auth.Subject;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Gebruiker(String naam, String email,String telefoonnummer) {
+public class Gebruiker implements Principal {
+    private String naam;
+    private String email;
+    private String telefoonnummer;
+    private String wachtwoord;
+    private String role;
+
+    private static List<Gebruiker> alleGebruikers;
+
+    static {
+        alleGebruikers = new ArrayList<>();
+        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim1", "admin"));
+        alleGebruikers.add(new Gebruiker("reda", "reda@hoofd.nl", "112", "geheim1", "klant"));
+
+    }
+
+    public Gebruiker(String naam, String email, String telefoonnummer, String wachtwoord, String role) {
         this.naam = naam;
         this.email = email;
         this.telefoonnummer = telefoonnummer;
+        this.wachtwoord = wachtwoord;
+        this.role = role;
     }
 
     public Gebruiker() {
     }
 
-    public static String getNaam() {
+    public static Gebruiker getUserByName(String email) {
+        for (Gebruiker gebruiker : alleGebruikers) {
+            if (gebruiker.email.equals(email)) {
+                return gebruiker;
+            }
+        }
+        return null;
+    }
+
+    public String getNaam() {
         return naam;
     }
 
@@ -22,7 +49,7 @@ public class Gebruiker {
         this.naam = naam;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -30,7 +57,7 @@ public class Gebruiker {
         this.email = email;
     }
 
-    public static String getTelefoonnummer() {
+    public String getTelefoonnummer() {
         return telefoonnummer;
     }
 
@@ -38,10 +65,43 @@ public class Gebruiker {
         this.telefoonnummer = telefoonnummer;
     }
 
+    public String getWachtwoord() {
+        return wachtwoord;
+    }
+
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public static String validateLogin(String email, String wachtwoord) {
+        for (Gebruiker gebruiker : alleGebruikers) {
+            if (gebruiker.email.equals(email) && gebruiker.wachtwoord.equals(wachtwoord)) {
+                return gebruiker.role;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Gebruiker [naam=" + naam + ", email=" + email + ", telefoon=" + telefoonnummer + "]";
     }
 
-}
+    @Override
+    public String getName() {
+        return naam;
+    }
 
+    @Override
+    public boolean implies(Subject subject) {
+        return Principal.super.implies(subject);
+    }
+}

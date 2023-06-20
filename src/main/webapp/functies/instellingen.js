@@ -1,6 +1,7 @@
+// Functie om de achtergrond te wijzigen en op te slaan in de local storage
 function veranderAchtergrond() {
   // Haalt het selectievakje op
-  var select = document.querySelector('select');
+  var select = document.getElementById("background-select");
 
   // Haalt de waarde van de geselecteerde optie op
   var value = select.options[select.selectedIndex].value;
@@ -30,22 +31,50 @@ function veranderAchtergrond() {
   localStorage.setItem('background', value);
 }
 
+// Functie om de gebruikersnaam weer te geven
+function decodeToken(token) {
+  const payload = token.split('.')[1];
+  const decodedPayload = atob(payload);
+  return JSON.parse(decodedPayload);
+}
+
+
+function displayUsername() {
+  var token = window.sessionStorage.getItem('JWT');
+  var decodedToken = decodeToken(token);
+  console.log(decodedToken);
+  var username = decodedToken.naam;
+  var role = decodedToken.role;
+
+  var loginButton = document.getElementById("login-button");
+  var userSpan = document.getElementById("user-info");
+
+  if (role === "admin") {
+    loginButton.textContent = "Admin";
+    loginButton.setAttribute("href", "admin.html");
+  } else {
+    loginButton.textContent = "Logout";
+    loginButton.setAttribute("href", "logout.html");
+  }
+
+  userSpan.textContent = "Welkom, " + username + "!";
+}
+
+
+
 window.onload = function() {
-  // Haalt het <body> element op
+  displayUsername();
+
   var body = document.getElementsByTagName("body")[0];
 
   // Haalt de opgeslagen achtergrond op uit de local storage
   var background = localStorage.getItem('background');
 
-  // Controleert of er een opgeslagen achtergrond is
   if (background) {
-    // Haalt het selectievakje op
-    var select = document.querySelector('select');
+    var select = document.getElementById("background-select");
     
-    // Stelt de waarde van het selectievakje in op de opgeslagen waarde
     select.value = background;
 
-    // Verandert de achtergrond naar de opgeslagen achtergrond in de localstorage
     veranderAchtergrond();
   }
 };
