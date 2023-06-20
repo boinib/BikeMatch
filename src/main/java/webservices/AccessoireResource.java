@@ -9,6 +9,7 @@ import com.azure.storage.blob.models.BlobStorageException;
 import module.Accessoires;
 import module.Producten;
 
+import javax.annotation.security.RolesAllowed;
 import javax.json.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -70,6 +71,7 @@ public class AccessoireResource {
         return job.build().toString();
     }
     @POST
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addAccessoire(String accessoireData) {
@@ -103,7 +105,7 @@ public class AccessoireResource {
                         .add("afbeelding", accessoireAfbeelding)
                         .add("prijs", accessoirePrijs)
                         .add("beschrijving", accessoireBeschrijving)
-                        .add("voorrraad", accessoireVoorraad)
+                        .add("voorraad", accessoireVoorraad)
                         .build();
 
                 JsonArrayBuilder AccessoireBuilder = Json.createArrayBuilder();
@@ -133,7 +135,7 @@ public class AccessoireResource {
                                 .add("afbeelding", accessoireAfbeelding)
                                 .add("prijs", accessoirePrijs)
                                 .add("beschrijving", accessoireBeschrijving)
-                                .add("voorrraad", accessoireVoorraad)
+                                .add("voorraad", accessoireVoorraad)
                                 .build())
                         .build();
 

@@ -11,6 +11,12 @@
   <script type="text/javascript" src="/functies/navbar.js" defer></script>
 </head>
 <body>
+  <header class="header">
+    <div class="topbar">
+      <a id="login-button" href="login.html" class="login-button">Login</a>
+      <span id="user-info"></span>
+    </div>    
+  </header>  
   <div id="navbar-placeholder"></div>
   <select id="background-select" onchange="changeBackground()" style="display: none;">
     <option value="default">Standaard achtergrond</option>
@@ -25,7 +31,7 @@
   </main>
   <script type="text/javascript">
     function getAccessoireById(id) {
-      const url = `https://ipasss-1685617513032.azurewebsites.net/restservices/accessoires/${id}`;
+      const url = `/restservices/accessoires/${id}`;
       return fetch(url)
         .then(response => {
           if (!response.ok) {

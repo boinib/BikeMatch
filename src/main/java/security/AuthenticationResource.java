@@ -26,24 +26,27 @@ public class AuthenticationResource {
         String role = Gebruiker.validateLogin(username, pass);
         if (role == null) throw new IllegalArgumentException("No user found");
         String token = createToken(username, role);
-        if ("admin".equals(role)) {
-            return Response.status(Response.Status.OK)
-                    .entity(new SimpleEntry<>("adminCode", token))
-                    .build();
-        } else {
-            return Response.ok(new SimpleEntry<>("abc", token)).build();
-        }
+        return Response.ok(new SimpleEntry<>("JWT", token)).build();
     }
+
     private String createToken(String username, String role) {
         Calendar expiration = Calendar.getInstance();
         expiration.add(Calendar.MINUTE, 30);
 
+        Gebruiker gebruiker = Gebruiker.getUserByName(username);
+        if (gebruiker == null) {
+            throw new IllegalArgumentException("No user found");
+        }
+
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(expiration.getTime())
-                .claim("username", username) // Voeg de gebruikersnaam toe aan de claims
                 .claim("role", role)
-                .signWith(SignatureAlgorithm.HS256, key) // Use the provided key for signing
+                .claim("username", username)
+                .claim("naam", gebruiker.getNaam()) // Extra claim voor naam (gebruikersnaam)
+                .claim("email", gebruiker.getEmail()) // Extra claim voor email
+                .claim("telefoonnummer", gebruiker.getTelefoonnummer()) // Extra claim voor telefoonnummer
+                .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
 
@@ -51,7 +54,6 @@ public class AuthenticationResource {
         try {
             // Generate a secret key
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            System.out.println(keyGenerator);
             return keyGenerator.generateKey();
         } catch (Exception e) {
             // Handle any exception that occurs during key generation

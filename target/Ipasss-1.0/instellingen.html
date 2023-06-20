@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="Style/style-animation.css">
     <link rel="icon" type="image/x-icon" href="/images/Logo/logo-color.png">
     <script type="module" src="/functies/navbar.js" defer></script>
+    <script type="module" src="/functies/instellingen.js" defer></script>
+
     <script type="text/javascript">
       function changeBackground() {
         var select = document.getElementById("background-select");
@@ -47,6 +49,12 @@
     </script>
   </head>
   <body>
+    <header class="header">
+      <div class="topbar">
+        <a id="login-button" href="login.html" class="login-button">Login</a>
+        <span id="user-info"></span>
+      </div>     
+    </header>  
     <div id="navbar-placeholder"></div>
     <div>
       <label for="background-select">Selecteer een achtergrond:</label>

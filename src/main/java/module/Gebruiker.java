@@ -32,9 +32,9 @@ public class Gebruiker implements Principal {
     public Gebruiker() {
     }
 
-    public static Gebruiker getUserByName(String naam) {
+    public static Gebruiker getUserByName(String email) {
         for (Gebruiker gebruiker : alleGebruikers) {
-            if (gebruiker.naam.equals(naam)) {
+            if (gebruiker.email.equals(email)) {
                 return gebruiker;
             }
         }
@@ -83,11 +83,11 @@ public class Gebruiker implements Principal {
 
     public static String validateLogin(String email, String wachtwoord) {
         for (Gebruiker gebruiker : alleGebruikers) {
-            if (gebruiker.getEmail().equals(email) && gebruiker.getWachtwoord().equals(wachtwoord)) {
-                return gebruiker.getRole();
+            if (gebruiker.email.equals(email) && gebruiker.wachtwoord.equals(wachtwoord)) {
+                return gebruiker.role;
             }
         }
-        return null; // Invalid login credentials
+        return null;
     }
 
     @Override

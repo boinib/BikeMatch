@@ -7,10 +7,17 @@ document.querySelector("#addFietsForm").addEventListener("submit", function (eve
         request[key] = value;
     });
 
-    fetch("https://ipasss-1685617513032.azurewebsites.net/restservices/fiets", {
+    const token = window.sessionStorage.getItem('JWT');
+    const role = window.sessionStorage.getItem('role');
+
+  if (role === 'admin') {
+    fetch("/restservices/fiets", {
       method: "POST",
       body: JSON.stringify(request),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
     })
       .then(response => response.json())
       .then(data => {
@@ -19,4 +26,7 @@ document.querySelector("#addFietsForm").addEventListener("submit", function (eve
       .catch(error => {
         console.error("Fout bij het toevoegen van de fiets:", error);
       });
-  });
+  } else {
+    console.log("Alleen admin kan toevoegen");
+  }
+});
