@@ -74,7 +74,6 @@ let url;
         const URLvoorLengte = '/restservices/fiets';
         const lengteResponse = await fetch(URLvoorLengte);
         const LengteFietsen = await lengteResponse.json();
-        console.log(LengteFietsen);
 
         const FietstypeOpties = fietsTypeSelect.options;
         FietstypeOpties[0].textContent = `Alle fietsen (${LengteFietsen.length})`;

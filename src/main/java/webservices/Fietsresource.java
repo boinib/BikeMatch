@@ -29,7 +29,6 @@ public class Fietsresource {
     @Produces("application/json")
     public String alleFietsen() {
         Producten producten = Producten.getProduct();
-        System.out.println("a");
         List<Fiets> countries = producten.getAllProducts();
         return alleFietsen(countries).toString();
     }

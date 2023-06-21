@@ -42,7 +42,6 @@ function decodeToken(token) {
 function displayUsername() {
   var token = window.sessionStorage.getItem('JWT');
   var decodedToken = decodeToken(token);
-  console.log(decodedToken);
   var username = decodedToken.naam;
   var role = decodedToken.role;
 

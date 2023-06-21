@@ -45,7 +45,6 @@ public class AfspraakResource {
             String opmerking = jsonData.getString("notes");
 
             Afspraak afspraak = Afspraak.addAfspraak(afspraakNaam, afspraakEmail, afspraakTelefoon, datum, tijd, opmerking);
-            System.out.println(afspraak);
 
             if (afspraak == null) {
                 var error = new AbstractMap.SimpleEntry<>("error", "customer already exists");
@@ -63,7 +62,6 @@ public class AfspraakResource {
 
                 JsonReader jsonReader = Json.createReader(new ByteArrayInputStream(existingData));
                 JsonArray bestaandeAfspraken = jsonReader.readArray();
-                System.out.println(bestaandeAfspraken);
                 jsonReader.close();
 
                 JsonObject nieuweAfspraak = Json.createObjectBuilder()
@@ -84,7 +82,6 @@ public class AfspraakResource {
                 JsonArray bijgewerkteAfspraken = afsprakenBuilder.build();
 
                 String bijgewerkteJson = bijgewerkteAfspraken.toString();
-                System.out.println(bijgewerkteJson);
 
                 blobClient.upload(BinaryData.fromStream(new ByteArrayInputStream(bijgewerkteJson.getBytes(StandardCharsets.UTF_8)), (long) existingData.length), true);
 

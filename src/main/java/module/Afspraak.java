@@ -19,7 +19,6 @@ public class Afspraak {
     public static Afspraak addAfspraak(String naam, String email, String telefoon, String datum, String tijd, String opmerking) {
         Gebruiker gebruiker = new Gebruiker(naam, email, telefoon,null,null);
         Afspraak afspraak = new Afspraak(gebruiker,datum, tijd, opmerking);
-        System.out.println(afspraak);
         return afspraak;
     }
     public String getDatum() {
