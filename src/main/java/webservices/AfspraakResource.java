@@ -6,7 +6,7 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
-import module.Afspraak;
+import model.Afspraak;
 
 import javax.json.*;
 import javax.ws.rs.*;

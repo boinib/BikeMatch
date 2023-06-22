@@ -1,4 +1,4 @@
-package module;
+package model;
 
 import javax.security.auth.Subject;
 import java.security.Principal;

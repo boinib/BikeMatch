@@ -1,4 +1,4 @@
-package module;
+package model;
 
 public class WinkelwagenProduct {
     private int aantal;

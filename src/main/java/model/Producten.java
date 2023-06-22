@@ -1,4 +1,4 @@
-package module;
+package model;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;

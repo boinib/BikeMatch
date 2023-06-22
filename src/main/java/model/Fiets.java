@@ -1,4 +1,4 @@
-package module;
+package model;
 
 import net.minidev.json.annotate.JsonIgnore;
 

@@ -1,4 +1,4 @@
-package module;
+package model;
 
 public class Klant extends Gebruiker {
     private String adres;

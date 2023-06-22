@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import module.Gebruiker;
+import model.Gebruiker;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;

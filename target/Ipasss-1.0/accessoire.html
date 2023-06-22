@@ -74,14 +74,26 @@
     const Url = new URLSearchParams(window.location.search);
     const accessoireId = Url.get('id');
     getAccessoireById(accessoireId)
-      .then(product => {
-        if (product) {
-          accessoireInfo(product);
-        } else {
-          const productContainer = document.querySelector('#product-container');
-          productContainer.innerHTML = '<p>Dit product bestaat niet.</p>';
-        }
-      });
+  .then(product => {
+    if (product) {
+      accessoireInfo(product);
+
+      const role = sessionStorage.getItem('role');
+      if (role === 'admin') {
+        const editKnop = document.createElement('button');
+        editKnop.innerText = 'Edit';
+        editKnop.classList.add('edit-button');
+        editKnop.addEventListener('click', () => {
+          window.location.href = 'addaccessoire.html?id=' + accessoireId;
+        });
+
+        document.querySelector('.product-info-container').appendChild(editKnop);
+      }
+    } else {
+      document.querySelector('#product-container').innerHTML = '<p>Dit product bestaat niet.</p>';
+    }
+  });
+
   </script>
 </body>
 </html>

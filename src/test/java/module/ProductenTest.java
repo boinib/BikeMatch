@@ -1,5 +1,8 @@
 package module;
 
+import model.Accessoires;
+import model.Fiets;
+import model.Producten;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -28,7 +31,7 @@ public class ProductenTest {
     @Test
     public void testGetAllAccessoires() {
         List<Accessoires> accessoires = producten.getAllAccessoires();
-        assertEquals(9, accessoires.size());
+        assertEquals(11, accessoires.size());
     }
 
 }

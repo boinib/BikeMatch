@@ -6,7 +6,9 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
-import module.*;
+import model.Fiets;
+import model.Producten;
+import model.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.*;

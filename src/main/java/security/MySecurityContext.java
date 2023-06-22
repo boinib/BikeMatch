@@ -1,6 +1,6 @@
 package security;
 
-import module.Gebruiker;
+import model.Gebruiker;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;

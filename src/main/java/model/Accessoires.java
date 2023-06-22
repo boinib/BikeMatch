@@ -1,4 +1,4 @@
-package module;
+package model;
 
 public class Accessoires {
     private String id;

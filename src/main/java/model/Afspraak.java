@@ -1,7 +1,4 @@
-package module;
-
-import java.sql.Time;
-import java.util.Date;
+package model;
 
 public class Afspraak {
     private Gebruiker gebruiker;
