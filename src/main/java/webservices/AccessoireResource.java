@@ -19,6 +19,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonReaderFactory;
+import javax.json.JsonValue;
+
+
 
 
 @Path("/accessoires")
@@ -28,13 +37,15 @@ public class AccessoireResource {
     private static final String STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net";
     private static final String CONTAINER_NAME = "blobipass";
     private static final String BLOB_NAME = "accessoire.json";
+
     @GET
     @Produces("application/json")
     public String allAccessoires() {
         Producten producten = Producten.getProduct();
-        List<Accessoires> countries = producten.getAllAccessoires();
-        return alleAccessoires(countries).toString();
+        List<Accessoires> accessoires = producten.getAllAccessoires();
+        return alleAccessoires(accessoires).toString();
     }
+
     @GET
     @Path("/{code}")
     @Produces("application/json")
@@ -43,16 +54,17 @@ public class AccessoireResource {
         Accessoires acc = producten.getAccessoireById(accId);
         return accessoireById(acc).toString();
     }
-    private JsonArray alleAccessoires(List<Accessoires> countries) {
+
+    private JsonArray alleAccessoires(List<Accessoires> accessoires) {
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for (Accessoires country : countries) {
+        for (Accessoires accessoire : accessoires) {
             JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("id", country.getId())
-                    .add("naam", country.getNaam())
-                    .add("afbeelding", country.getAfbeelding())
-                    .add("prijs", country.getPrijs())
-                    .add("beschrijving", country.getBeschrijving())
-                    .add("voorraad", country.getVoorraad());
+            job.add("id", accessoire.getId())
+                    .add("naam", accessoire.getNaam())
+                    .add("afbeelding", accessoire.getAfbeelding())
+                    .add("prijs", accessoire.getPrijs())
+                    .add("beschrijving", accessoire.getBeschrijving())
+                    .add("voorraad", accessoire.getVoorraad());
 
             jsonArrayBuilder.add(job.build());
         }
@@ -70,6 +82,7 @@ public class AccessoireResource {
 
         return job.build().toString();
     }
+
     @POST
     @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
@@ -164,5 +177,114 @@ public class AccessoireResource {
                 .header("Access-Control-Allow-Methods", "POST")
                 .header("Access-Control-Allow-Headers", "Content-Type")
                 .build();
+    }
+
+    @PUT
+    @RolesAllowed("admin")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAccessoire(@PathParam("id") String id, String accessoireData) {
+        try {
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString(STORAGE_CONNECTION_STRING)
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
+
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
+
+                JsonReaderFactory factory = Json.createReaderFactory(null);
+                JsonReader jsonReader = factory.createReader(new ByteArrayInputStream(existingData));
+                JsonArray existingAccessoires = jsonReader.readArray();
+                jsonReader.close();
+
+                JsonArrayBuilder updatedAccessoiresBuilder = Json.createArrayBuilder();
+
+                for (JsonValue existingAccessoireValue : existingAccessoires) {
+                    JsonObject accessoireObject = (JsonObject) existingAccessoireValue;
+                    String accessoireId = accessoireObject.getString("id");
+                    if (accessoireId.equals(id)) {
+                        JsonObject updatedAccessoire = Json.createReader(new StringReader(accessoireData)).readObject();
+                        JsonObjectBuilder geupdateAccessoireBuilder = Json.createObjectBuilder();
+                        updatedAccessoire.forEach((key, value) -> geupdateAccessoireBuilder.add(key, value));
+                        geupdateAccessoireBuilder.add("id", accessoireId);
+                        JsonObject geupdateAccessoireMetId = geupdateAccessoireBuilder.build();
+                        updatedAccessoiresBuilder.add(geupdateAccessoireMetId);
+                    } else {
+                        updatedAccessoiresBuilder.add(accessoireObject);
+                    }
+                }
+
+                JsonArray updatedAccessoires = updatedAccessoiresBuilder.build();
+                String updatedJson = updatedAccessoires.toString();
+
+                blobClient.upload(BinaryData.fromString(updatedJson), true);
+
+                return Response.ok().header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "PUT")
+                        .header("Access-Control-Allow-Headers", "Content-Type")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @DELETE
+    @RolesAllowed("admin")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteAccessoire(@PathParam("id") String id) {
+        try {
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString(STORAGE_CONNECTION_STRING)
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
+
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
+
+                JsonReaderFactory factory = Json.createReaderFactory(null);
+                JsonReader jsonReader = factory.createReader(new ByteArrayInputStream(existingData));
+                JsonArray bestaandeAccessoires = jsonReader.readArray();
+                jsonReader.close();
+
+                JsonArrayBuilder updatedAccessoiresBuilder = Json.createArrayBuilder();
+
+                for (JsonValue bestaandeAccessoire : bestaandeAccessoires) {
+                    JsonObject accessoireObject = (JsonObject) bestaandeAccessoire;
+                    String accessoireId = accessoireObject.getString("id");
+                    if (!accessoireId.equals(id)) {
+                        updatedAccessoiresBuilder.add(accessoireObject);
+                    }
+                }
+
+                JsonArray updatedAccessoires = updatedAccessoiresBuilder.build();
+                String updatedJson = updatedAccessoires.toString();
+
+                blobClient.upload(BinaryData.fromString(updatedJson), true);
+
+                return Response.ok().header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "DELETE")
+                        .header("Access-Control-Allow-Headers", "Content-Type")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

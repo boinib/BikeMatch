@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Producten {
-    private List<Fiets> alleProducten = new ArrayList<>();
-    private List<Accessoires> accessoires = new ArrayList<>();
+    private List<Fiets> alleFietsen = new ArrayList<>();
+    private List<Accessoires> alleAccessoires = new ArrayList<>();
 
     private static Producten mijnproducten = new Producten();
 
@@ -45,7 +45,7 @@ public class Producten {
                 if (jn.isArray()) {
                     for (JsonNode accessoirejson : jn) {
                         Accessoires accessoire = createAccessoire(accessoirejson);
-                        accessoires.add(accessoire);
+                        alleAccessoires.add(accessoire);
                     }
                 }
             }
@@ -80,7 +80,7 @@ public class Producten {
                 if (jn.isArray()) {
                     for (JsonNode fietsen : jn) {
                         Fiets fiets = createFiets(fietsen);
-                        alleProducten.add(fiets);
+                        alleFietsen.add(fiets);
                     }
                 }
             }
@@ -121,11 +121,11 @@ public class Producten {
     }
 
     public List<Fiets> getAllProducts() {
-        return alleProducten;
+        return alleFietsen;
     }
 
     public Fiets getFietsById(String code) {
-        for (Fiets fiets : alleProducten) {
+        for (Fiets fiets : alleFietsen) {
             if (fiets.getId().equalsIgnoreCase(code)) {
                 return fiets;
             }
@@ -135,7 +135,7 @@ public class Producten {
     public List<Fiets> getFietsByType(String type) {
         List<Fiets> fietsen = new ArrayList<>();
         if (type.equalsIgnoreCase("Overige")) {
-            for (Fiets fiets : alleProducten) {
+            for (Fiets fiets : alleFietsen) {
                 if (!fiets.getType().equalsIgnoreCase("Stadsfiets")
                         && !fiets.getType().equalsIgnoreCase("Mountainbike")
                         && !fiets.getType().equalsIgnoreCase("Racefiets")
@@ -144,7 +144,7 @@ public class Producten {
                 }
             }
         } else {
-            for (Fiets fiets : alleProducten) {
+            for (Fiets fiets : alleFietsen) {
                 if (fiets.getType().equalsIgnoreCase(type)) {
                     fietsen.add(fiets);
                 }
@@ -153,10 +153,10 @@ public class Producten {
         return fietsen;
     }
     public List<Accessoires> getAllAccessoires() {
-        return accessoires;
+        return alleAccessoires;
     }
     public Accessoires getAccessoireById(String id) {
-        for (Accessoires accessoire : accessoires) {
+        for (Accessoires accessoire : alleAccessoires) {
             if (accessoire.getId().equalsIgnoreCase(id)) {
                 return accessoire;
             }

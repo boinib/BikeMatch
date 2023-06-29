@@ -12,13 +12,17 @@ public class Gebruiker implements Principal {
     private String wachtwoord;
     private String role;
 
-    private static List<Gebruiker> alleGebruikers;
+    private static List<Gebruiker> alleGebruikers = new ArrayList<>();
 
     static {
         alleGebruikers = new ArrayList<>();
-        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim1", "admin"));
-        alleGebruikers.add(new Gebruiker("reda", "reda@hoofd.nl", "112", "geheim1", "klant"));
+        initializeGebruikers();
+    }
 
+    private static void initializeGebruikers() {
+        alleGebruikers.add(new Gebruiker("amin", "amin@hoofd.nl", "112", "geheim1", "admin"));
+        alleGebruikers.add(new Klant("reda", "reda@hoofd.nl", "112", "geheim1", "klant", "0vervecht-noord"));
+        alleGebruikers.add(new Winkeleigenaar("kapper", "kapper@hoofd.nl", "911", "geheim2", "winkeleigenaar", "Fietsenmaker"));
     }
 
     public Gebruiker(String naam, String email, String telefoonnummer, String wachtwoord, String role) {

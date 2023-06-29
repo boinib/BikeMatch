@@ -17,7 +17,7 @@ public class ProductenTest {
     @Test
     public void testGetAllProducts() {
         List<Fiets> alleProducten = producten.getAllProducts();
-        assertEquals(14, alleProducten.size());
+        assertEquals(15, alleProducten.size());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class ProductenTest {
     @Test
     public void testGetAllAccessoires() {
         List<Accessoires> accessoires = producten.getAllAccessoires();
-        assertEquals(11, accessoires.size());
+        assertEquals(9, accessoires.size());
     }
 
 }

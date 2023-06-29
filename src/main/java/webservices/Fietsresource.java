@@ -8,7 +8,6 @@ import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
 import model.Fiets;
 import model.Producten;
-import model.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.*;
@@ -31,8 +30,8 @@ public class Fietsresource {
     @Produces("application/json")
     public String alleFietsen() {
         Producten producten = Producten.getProduct();
-        List<Fiets> countries = producten.getAllProducts();
-        return alleFietsen(countries).toString();
+        List<Fiets> fietsen = producten.getAllProducts();
+        return alleFietsen(fietsen).toString();
     }
 
 
@@ -61,27 +60,27 @@ public class Fietsresource {
         return alleFietsen(fietsen).toString();
     }
 
-    private JsonArray alleFietsen(List<Fiets> countries) {
+    private JsonArray alleFietsen(List<Fiets> fietsen) {
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for (Fiets country : countries) {
+        for (Fiets fiets : fietsen) {
             JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("id", country.getId())
-                    .add("merk", country.getMerk())
-                    .add("type", country.getType())
-                    .add("prijs", country.getPrijs())
-                    .add("gewicht", country.getGewicht())
-                    .add("versnellingen", country.getVersnellingen())
-                    .add("remmen", country.getRemmen())
-                    .add("beschrijving", country.getBeschrijving())
-                    .add("afbeelding", country.getAfbeelding())
-                    .add("wielmaat", country.getWielmaat())
-                    .add("framemaat", country.getFramemaat())
-                    .add("materiaalFrame", country.getMateriaalframe())
-                    .add("voorvork", country.getVoorvork())
-                    .add("verlichting", country.getVerlichting())
-                    .add("bagagedrager", country.getBagagedrager())
-                    .add("slot", country.getSlot())
-                    .add("link", country.getLink());
+            job.add("id", fiets.getId())
+                    .add("merk", fiets.getMerk())
+                    .add("type", fiets.getType())
+                    .add("prijs", fiets.getPrijs())
+                    .add("gewicht", fiets.getGewicht())
+                    .add("versnellingen", fiets.getVersnellingen())
+                    .add("remmen", fiets.getRemmen())
+                    .add("beschrijving", fiets.getBeschrijving())
+                    .add("afbeelding", fiets.getAfbeelding())
+                    .add("wielmaat", fiets.getWielmaat())
+                    .add("framemaat", fiets.getFramemaat())
+                    .add("materiaalFrame", fiets.getMateriaalframe())
+                    .add("voorvork", fiets.getVoorvork())
+                    .add("verlichting", fiets.getVerlichting())
+                    .add("bagagedrager", fiets.getBagagedrager())
+                    .add("slot", fiets.getSlot())
+                    .add("link", fiets.getLink());
             jsonArrayBuilder.add(job.build());
         }
         return jsonArrayBuilder.build();
@@ -237,6 +236,114 @@ public class Fietsresource {
                 .header("Access-Control-Allow-Methods", "POST")
                 .header("Access-Control-Allow-Headers", "Content-Type")
                 .build();
+    }
+    @PUT
+    @RolesAllowed("admin")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateFiets(@PathParam("id") String id, String fietsData) {
+        try {
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString(STORAGE_CONNECTION_STRING)
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
+
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
+
+                JsonReaderFactory factory = Json.createReaderFactory(null);
+                JsonReader jsonReader = factory.createReader(new ByteArrayInputStream(existingData));
+                JsonArray bestaandeFietsen = jsonReader.readArray();
+                jsonReader.close();
+
+                JsonArrayBuilder updateFietsBuilder = Json.createArrayBuilder();
+
+                for (JsonValue bestaandeFiets : bestaandeFietsen) {
+                    JsonObject fietsObject = (JsonObject) bestaandeFiets;
+                    String fietsId = fietsObject.getString("id");
+                    if (fietsId.equals(id)) {
+                        JsonObject geupdateFiets = Json.createReader(new StringReader(fietsData)).readObject();
+                        JsonObjectBuilder geupdateFietsBuilder = Json.createObjectBuilder();
+                        geupdateFiets.forEach((key, value) -> geupdateFietsBuilder.add(key, value));
+                        geupdateFietsBuilder.add("id", fietsId);
+                        JsonObject geupdateFietsWithId = geupdateFietsBuilder.build();
+                        updateFietsBuilder.add(geupdateFietsWithId);
+                    } else {
+                        updateFietsBuilder.add(fietsObject);
+                    }
+                }
+
+                JsonArray updatedFiets = updateFietsBuilder.build();
+                String updatedJson = updatedFiets.toString();
+
+                blobClient.upload(BinaryData.fromString(updatedJson), true);
+
+                return Response.ok().header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "PUT")
+                        .header("Access-Control-Allow-Headers", "Content-Type")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @DELETE
+    @RolesAllowed("admin")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteFiets(@PathParam("id") String id) {
+        try {
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .connectionString(STORAGE_CONNECTION_STRING)
+                    .buildClient();
+            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
+            BlobClient blobClient = containerClient.getBlobClient(BLOB_NAME);
+
+            if (blobClient.exists()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blobClient.download(outputStream);
+                byte[] existingData = outputStream.toByteArray();
+
+                JsonReaderFactory factory = Json.createReaderFactory(null);
+                JsonReader jsonReader = factory.createReader(new ByteArrayInputStream(existingData));
+                JsonArray bestaandeFietsen = jsonReader.readArray();
+                jsonReader.close();
+
+                JsonArrayBuilder updateFietsBuilder = Json.createArrayBuilder();
+
+                for (JsonValue bestaandeFiets : bestaandeFietsen) {
+                    JsonObject fietsObject = (JsonObject) bestaandeFiets;
+                    String fietsId = fietsObject.getString("id");
+                    if (!fietsId.equals(id)) {
+                        updateFietsBuilder.add(fietsObject);
+                    }
+                }
+
+                JsonArray updatedFiets = updateFietsBuilder.build();
+                String updatedJson = updatedFiets.toString();
+
+                blobClient.upload(BinaryData.fromString(updatedJson), true);
+
+                return Response.ok().header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "DELETE")
+                        .header("Access-Control-Allow-Headers", "Content-Type")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
 

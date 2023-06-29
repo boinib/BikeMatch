@@ -15,7 +15,6 @@ import java.util.Calendar;
 
 @Path("/login")
 public class AuthenticationResource {
-    // Change the key to a SecretKey object
     public static final Key key = generateSecretKey();
 
     @POST
@@ -51,11 +50,9 @@ public class AuthenticationResource {
 
     static SecretKey generateSecretKey() {
         try {
-            // Generate a secret key
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             return keyGenerator.generateKey();
         } catch (Exception e) {
-            // Handle any exception that occurs during key generation
             e.printStackTrace();
             return null;
         }

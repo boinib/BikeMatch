@@ -20,7 +20,7 @@ async function login(event) {
     let role = extractRoleFromToken(token);
     window.sessionStorage.setItem("JWT", token);
     window.sessionStorage.setItem("role", role); 
-    if (role === "admin") {
+    if (role === "admin" || role === "winkeleigenaar") {
       window.location.href = 'admin.html';
     } else {
       window.location.href = 'index.html';

@@ -48,12 +48,16 @@ function displayUsername() {
   var loginButton = document.getElementById("login-button");
   var userSpan = document.getElementById("user-info");
 
-  if (role === "admin") {
+  if (role === "admin" || role === "winkeleigenaar") {
     loginButton.textContent = "Admin";
     loginButton.setAttribute("href", "admin.html");
   } else {
     loginButton.textContent = "Logout";
-    loginButton.setAttribute("href", "logout.html");
+    loginButton.onclick = function() {
+      window.sessionStorage.removeItem('JWT');
+      window.sessionStorage.removeItem('role');
+      window.location.href = 'login.html';
+    };
   }
 
   userSpan.textContent = "Welkom, " + username + "!";

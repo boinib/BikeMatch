@@ -31,100 +31,111 @@
 
   <script type="module">
     async function getFietsById(id) {
-      const url = `/restservices/fiets/${id}`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-      });
+    const url = `/restservices/fiets/${id}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-      if (!response.ok) {
-        throw new Error('Error bij het ophalen van de fiets.');
-      }
-
-      const fiets = await response.json();
-      return fiets;
+    if (!response.ok) {
+      throw new Error('Error bij het ophalen van de fiets.');
     }
 
-    function fietsInfo(fiets) {
-      const fietsBlok = document.querySelector('#bike-container');
-      fietsBlok.innerHTML = `
-        <div class="bike-info-container">
-          <img src="${fiets.afbeelding}" alt="${fiets.alt}" class="bike-image">
-          <div class="bike-info-table">
-            <table>
-              <tr>
-                <th>Merk</th>
-                <td>${fiets.merk}</td>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <td>${fiets.type}</td>
-              </tr>
-              <tr>
-                <th>Beschrijving</th>
-                <td>${fiets.beschrijving}</td>
-              </tr>
-              <tr>
-                <th>Gewicht</th>
-                <td>${fiets.gewicht}</td>
-              </tr>
-              <tr>
-                <th>Versnellingen</th>
-                <td>${fiets.versnellingen}</td>
-              </tr>
-              <tr>
-                <th>Wielmaat</th>
-                <td>${fiets.wielmaat}</td>
-              </tr>
-              <tr>
-                <th>Framemaat</th>
-                <td>${fiets.framemaat}</td>
-              </tr>
-              <tr>
-                <th>Materiaal frame</th>
-                <td>${fiets.materiaalFrame}</td>
-              </tr>
-              <tr>
-                <th>Voorvork</th>
-                <td>${fiets.voorvork}</td>
-              </tr>
-              <tr>
-                <th>Verlichting</th>
-                <td>${fiets.verlichting}</td>
-              </tr>
-              <tr>
-                <th>Bagagedrager</th>
-                <td>${fiets.bagagedrager}</td>
-              </tr>
-              <tr>
-                <th>Slot</th>
-                <td>${fiets.slot}</td>
-              </tr>
-            </table>
-            <div class="bike-price">${fiets.prijs}</div>
-            <a class="bestel-link" href="${fiets.link}" target="_blank"><button>Bestelpagina openen</button></a> 
-            <a class="vergelijk-nu" href="vergelijk.html?bikeId=${fiets.id}"><button>Vergelijk nu</button></a> 
-          </div>
+    const fiets = await response.json();
+    return fiets;
+  }
+
+  function fietsInfo(fiets) {
+    const fietsBlok = document.querySelector('#bike-container');
+    fietsBlok.innerHTML = `
+      <div class="bike-info-container">
+        <img src="${fiets.afbeelding}" alt="${fiets.alt}" class="bike-image">
+        <div class="bike-info-table">
+          <table>
+            <tr>
+              <th>Merk</th>
+              <td>${fiets.merk}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>${fiets.type}</td>
+            </tr>
+            <tr>
+              <th>Beschrijving</th>
+              <td>${fiets.beschrijving}</td>
+            </tr>
+            <tr>
+              <th>Gewicht</th>
+              <td>${fiets.gewicht}</td>
+            </tr>
+            <tr>
+              <th>Versnellingen</th>
+              <td>${fiets.versnellingen}</td>
+            </tr>
+            <tr>
+              <th>Wielmaat</th>
+              <td>${fiets.wielmaat}</td>
+            </tr>
+            <tr>
+              <th>Framemaat</th>
+              <td>${fiets.framemaat}</td>
+            </tr>
+            <tr>
+              <th>Materiaal frame</th>
+              <td>${fiets.materiaalFrame}</td>
+            </tr>
+            <tr>
+              <th>Voorvork</th>
+              <td>${fiets.voorvork}</td>
+            </tr>
+            <tr>
+              <th>Verlichting</th>
+              <td>${fiets.verlichting}</td>
+            </tr>
+            <tr>
+              <th>Bagagedrager</th>
+              <td>${fiets.bagagedrager}</td>
+            </tr>
+            <tr>
+              <th>Slot</th>
+              <td>${fiets.slot}</td>
+            </tr>
+          </table>
+          <div class="bike-price">${fiets.prijs}</div>
+          <a class="bestel-link" href="${fiets.link}" target="_blank"><button>Bestelpagina openen</button></a>
+          <a class="vergelijk-nu" href="vergelijk.html?bikeId=${fiets.id}"><button>Vergelijk nu</button></a>
         </div>
-      `;
-      document.querySelector('title').innerHTML = `${fiets.merk}`;
+      </div>
+    `;
+    document.querySelector('title').innerHTML = `${fiets.merk}`;
+
+    const role = sessionStorage.getItem('role');
+    if (role === 'admin') {
+      const editButton = document.createElement('button');
+      editButton.innerText = 'Edit';
+      editButton.classList.add('edit-button');
+      editButton.addEventListener('click', () => {
+        window.location.href = `addfiets.html?id=${fiets.id}`;
+      });
+      fietsBlok.appendChild(editButton);
+
     }
+  }
 
-    async function laadFietsInfo() {
-      const url = new URLSearchParams(window.location.search);
-      const fietsId = url.get('id');
+  async function loadFietsInfo() {
+    const url = new URLSearchParams(window.location.search);
+    const fietsId = url.get('id');
 
-      try {
-        const fiets = await getFietsById(fietsId);
-        fietsInfo(fiets);
-      } catch (error) {
-        console.log(error);
-        const fietsBlok = document.querySelector('#bike-container');
-        fietsBlok.innerHTML = '<p>Deze fiets bestaat niet.</p>';
-      }
+    try {
+      const fiets = await getFietsById(fietsId);
+      fietsInfo(fiets);
+    } catch (error) {
+      console.log(error);
+      const fietsBlok = document.querySelector('#bike-container');
+      fietsBlok.innerHTML = '<p>Deze fiets bestaat niet.</p>';
     }
-
-    laadFietsInfo();
+  }
+  loadFietsInfo();
   </script>
 </body>
 </html>

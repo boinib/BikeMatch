@@ -17,6 +17,10 @@ public class Accessoires {
         this.voorraad = voorraad;
     }
 
+    public Accessoires() {
+
+    }
+
     public String getId() {
         return id;
     }
