@@ -104,6 +104,8 @@ if (id) {
       document.querySelector("#prijs").value = accessoire.prijs;
       document.querySelector("#afbeelding").value = accessoire.afbeelding;
       setAccessoireId(id);
+      document.querySelector("#deleteAccessoireButton").style.display = "inline-block"; // Maak de knop "Fiets verwijderen" zichtbaar
+
     })
     .catch(error => {
       console.error("Fout bij het ophalen van het accessoire:", error);
@@ -111,17 +113,17 @@ if (id) {
 }
 document.querySelector("#deleteAccessoireButton").addEventListener("click", function () {
   const accessoireId = document.querySelector("#accessoireId").value;
-  deleteFiets(accessoireId);
+  deleteAccessoire(accessoireId);
 });
 
 
-async function deleteFiets(accessoireId) {
+async function deleteAccessoire(accessoireId) {
   const token = window.sessionStorage.getItem('JWT');
   const confirmDelete = confirm('Weet je zeker dat je deze fiets wilt verwijderen?');
 
   if (confirmDelete) {
     try {
-      const url = `/restservices/accessoire/${accessoireId}`;
+      const url = `/restservices/accessoires/${accessoireId}`;
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {

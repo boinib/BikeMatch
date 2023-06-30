@@ -7,6 +7,7 @@ import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
 import model.Accessoires;
+import model.Fiets;
 import model.Producten;
 
 import javax.annotation.security.RolesAllowed;
@@ -43,6 +44,8 @@ public class AccessoireResource {
     public String allAccessoires() {
         Producten producten = Producten.getProduct();
         List<Accessoires> accessoires = producten.getAllAccessoires();
+        accessoires.clear();
+        producten.loadAccessoiresFromBlob();
         return alleAccessoires(accessoires).toString();
     }
 
@@ -265,7 +268,10 @@ public class AccessoireResource {
                 for (JsonValue bestaandeAccessoire : bestaandeAccessoires) {
                     JsonObject accessoireObject = (JsonObject) bestaandeAccessoire;
                     String accessoireId = accessoireObject.getString("id");
-                    if (!accessoireId.equals(id)) {
+                    if (accessoireId.equals(id)) {
+                        Producten producten = Producten.getProduct();
+                        producten.removeAccessoire(accessoireId);
+                    } else {
                         updatedAccessoiresBuilder.add(accessoireObject);
                     }
                 }

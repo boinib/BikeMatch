@@ -125,11 +125,11 @@ if (id) {
 
 document.querySelector("#deleteFietsButton").addEventListener("click", function () {
   const fietsId = document.querySelector("#fietsId").value;
-  deleteFiets(fietsId);
+  deleteAccessoire(fietsId);
 });
 
 
-async function deleteFiets(fietsId) {
+async function deleteAccessoire(fietsId) {
   const token = window.sessionStorage.getItem('JWT');
   const confirmDelete = confirm('Weet je zeker dat je deze fiets wilt verwijderen?');
 

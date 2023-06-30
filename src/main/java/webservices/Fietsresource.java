@@ -28,9 +28,11 @@ public class Fietsresource {
 
     @GET
     @Produces("application/json")
-    public String alleFietsen() {
+    public String getFietsen() {
         Producten producten = Producten.getProduct();
         List<Fiets> fietsen = producten.getAllProducts();
+        fietsen.clear();
+        producten.loadProductsFromBlob();
         return alleFietsen(fietsen).toString();
     }
 
@@ -110,7 +112,7 @@ public class Fietsresource {
         return job.build().toString();
     }
     @POST
-    @RolesAllowed("admin")
+    @RolesAllowed({"admin","winkeleigenaar"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addFiets(String fietsData) {
@@ -184,6 +186,8 @@ public class Fietsresource {
 
                 byte[] updatedData = updatedStream.toByteArray();
                 updatedStream.close();
+                Producten producten = Producten.getProduct();
+
 
                 blobClient.upload(BinaryData.fromBytes(updatedData), true);
             } else {
@@ -238,7 +242,7 @@ public class Fietsresource {
                 .build();
     }
     @PUT
-    @RolesAllowed("admin")
+    @RolesAllowed({"admin","winkeleigenaar"})
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -323,17 +327,24 @@ public class Fietsresource {
                 for (JsonValue bestaandeFiets : bestaandeFietsen) {
                     JsonObject fietsObject = (JsonObject) bestaandeFiets;
                     String fietsId = fietsObject.getString("id");
-                    if (!fietsId.equals(id)) {
+                    if (fietsId.equals(id)) {
+                        Producten producten = Producten.getProduct();
+                        producten.removeFiets(fietsId);
+                    } else {
                         updateFietsBuilder.add(fietsObject);
                     }
                 }
+                JsonArray updatedFietsen = updateFietsBuilder.build();
+                String updatedJson = updatedFietsen.toString();
 
-                JsonArray updatedFiets = updateFietsBuilder.build();
-                String updatedJson = updatedFiets.toString();
 
                 blobClient.upload(BinaryData.fromString(updatedJson), true);
 
-                return Response.ok().header("Access-Control-Allow-Origin", "*")
+                Producten producten = Producten.getProduct();
+                List<Fiets> fietsen = producten.getAllProducts();
+
+                return Response.ok(alleFietsen(fietsen).toString())
+                        .header("Access-Control-Allow-Origin", "*")
                         .header("Access-Control-Allow-Methods", "DELETE")
                         .header("Access-Control-Allow-Headers", "Content-Type")
                         .build();
@@ -345,6 +356,9 @@ public class Fietsresource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+
 }
 
 

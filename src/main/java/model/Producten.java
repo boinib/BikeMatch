@@ -24,12 +24,12 @@ public class Producten {
         mijnproducten = producten;
     }
 
-    private Producten() {
+    public Producten() {
         loadAccessoiresFromBlob();
         loadProductsFromBlob();
     }
 
-    private void loadAccessoiresFromBlob() {
+    public void loadAccessoiresFromBlob() {
         try {
             BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                     .connectionString("DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net")
@@ -64,7 +64,7 @@ public class Producten {
         return new Accessoires(id, naam, afbeelding, prijs, beschrijving, voorraad);
     }
 
-    private void loadProductsFromBlob() {
+    public void loadProductsFromBlob() {
         try {
             BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                     .connectionString("DefaultEndpointsProtocol=https;AccountName=ipassopslag;AccountKey=H5hFbFzP/AtKqOvv9km+SHoiSKp1cFaDHfWaCbJYnYxKnqFnu8VnUsPKMrlm8kdmaVmi2HNP0y28+AStDNL20g==;EndpointSuffix=core.windows.net")
@@ -162,5 +162,30 @@ public class Producten {
             }
         }
         return null;
+    }
+
+    public void removeFiets(String fietsId) {
+        Fiets fietsToRemove = null;
+        for (Fiets fiets : alleFietsen) {
+            if (fiets.getId().equalsIgnoreCase(fietsId)) {
+                fietsToRemove = fiets;
+                break;
+            }
+        }
+        if (fietsToRemove != null) {
+            alleFietsen.remove(fietsToRemove);
+        }
+    }
+    public void removeAccessoire(String accessoireId) {
+        Accessoires accessoireToRemove = null;
+        for (Accessoires accessoire : alleAccessoires) {
+            if (accessoire.getId().equalsIgnoreCase(accessoireId)) {
+                accessoireToRemove = accessoire;
+                break;
+            }
+        }
+        if (accessoireToRemove != null) {
+            alleFietsen.remove(accessoireToRemove);
+        }
     }
 }
