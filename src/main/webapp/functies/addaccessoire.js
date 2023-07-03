@@ -29,6 +29,7 @@ function addAccessoire(accessoire) {
         if (!response.ok) {
           throw new Error('Fout bij het toevoegen van de accessoire.');
         }
+        window.location.href = 'accessoires.html';
         return response.json();
       })
       .then(data => {
@@ -58,6 +59,7 @@ function updateAccessoire(accessoire, id) {
         if (!response.ok) {
           throw new Error('Fout bij het bijwerken van de accessoire.');
         }
+        window.location.href = 'accessoires.html';
         return response.json();
       })
       .then(data => {

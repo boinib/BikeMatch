@@ -17,7 +17,7 @@ public class ProductenTest {
     @Test
     public void testGetAllProducts() {
         List<Fiets> alleProducten = producten.getAllProducts();
-        assertEquals(14, alleProducten.size());
+        assertEquals(18, alleProducten.size());
     }
 
     @Test

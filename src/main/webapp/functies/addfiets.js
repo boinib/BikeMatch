@@ -29,6 +29,7 @@ function addFiets(fiets) {
         if (!response.ok) {
           throw new Error('Fout bij het toevoegen van de fiets.');
         }
+        window.location.href = 'producten.html';
         return response.json();
       })
       .then(data => {
@@ -59,6 +60,7 @@ function updateFiets(fiets, id) {
         if (!response.ok) {
           throw new Error('Fout bij het bijwerken van de fiets.');
         }
+        window.location.href = 'producten.html';
         return response.json();
       })
       .then(data => {
